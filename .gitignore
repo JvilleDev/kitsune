@@ -2,6 +2,8 @@
 backend/node_modules/
 backend/tokens/
 backend/.env
+backend/src/data.sqlite
+backend/src/profile_pics/*
 
 # Frontend Nuxt dev/build outputs
 frontend/.output
@@ -23,8 +25,6 @@ frontend/.DS_Store
 
 # Local env files
 frontend/.env
-frontend/.env.*
-frontend/!.env.example
 
 # Possible lock files
 frontend/bun.lockb
