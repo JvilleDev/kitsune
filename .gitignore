@@ -1,0 +1,33 @@
+# Backend dependencies and sensitive files
+backend/node_modules/
+backend/tokens/
+backend/.env
+
+# Frontend Nuxt dev/build outputs
+frontend/.output
+frontend/.data
+frontend/.nuxt
+frontend/.nitro
+frontend/.cache
+frontend/dist
+
+# Frontend Node dependencies
+frontend/node_modules/
+
+# Logs
+frontend/logs/
+frontend/*.log
+
+# Miscellaneous
+frontend/.DS_Store
+
+# Local env files
+frontend/.env
+frontend/.env.*
+frontend/!.env.example
+
+# Possible lock files
+frontend/bun.lockb
+frontend/package-lock.json
+backend/bun.lockb
+backend/package-lock.json
