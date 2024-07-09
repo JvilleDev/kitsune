@@ -1,7 +1,7 @@
 FROM node:18-bullseye-slim
 
 # Instala curl, bash y unzip
-RUN apt-get update && apt-get install -y curl bash unzip
+RUN apt-get update && apt-get install -y curl bash unzip python3
 
 # Instala bun
 RUN curl -fsSL https://bun.sh/install | bash
