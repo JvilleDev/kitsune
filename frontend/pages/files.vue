@@ -2,7 +2,7 @@
   <main>
     <h1><Icon name="tabler:folder" /><span>Archivos</span></h1>
     <div class="content">
-      <Select v-model="filter">
+      <Select v-model="filter" v-if="files.length > 0">
         <SelectTrigger class="mt-4 mx-4 w-52">
           <SelectValue placeholder="Filtrar" />
         </SelectTrigger>
@@ -31,6 +31,11 @@
           class="relative overflow-hidden rounded-md shadow-md file cursor-pointer active:scale-[0.98]"
           @click="showFileInfo(file.id)"
         >
+          <span
+            class="flex items-center justify-between gap-2 absolute top-2 right-2 px-2 py-1 rounded-lg z-20 ring-neutral-100 ring-1 text-xs text-white bg-amber-600"
+            v-if="file.isInResponse"
+            ><Icon name="tabler:square-check-filled" />EN USO</span
+          >
           <img
             v-if="file?.filetype?.startsWith('image')"
             :src="`${back_url}/api/media/${file.id}`"
@@ -168,9 +173,7 @@
               </DropdownMenuItem>
               <DropdownMenuItem
                 class="flex justify-start gap-2 items-center"
-                @click="
-                  changeFile()
-                "
+                @click="changeFile()"
                 ><Icon name="tabler:pencil" />Reemplazar
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -190,11 +193,22 @@
       </DialogContent>
     </Dialog>
     <Dialog :open="showAddDialog" @update:open="showAddDialog = $event">
-      <DialogTrigger as-child>
-        <Button class="add-button" @click="showAddDialog = true">
-          <Icon name="tabler:cloud-upload" />
-        </Button>
-      </DialogTrigger>
+      <TooltipProvider>
+        <Tooltip>
+          <DialogTrigger as-child>
+            <Button class="add-button" @click="showAddDialog = true">
+              <TooltipTrigger
+                class="focus:outline-none focus-within:outline-none focus-visible:outline-none"
+              >
+                <Icon name="tabler:cloud-upload" />
+              </TooltipTrigger>
+            </Button>
+          </DialogTrigger>
+          <TooltipContent>
+            <p>Subir archivo</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <DialogContent>
         <DialogHeader>
           <DialogTitle> Subir archivo </DialogTitle>
@@ -318,8 +332,8 @@
 <script setup lang="ts">
 const { back_url } = useRuntimeConfig().public;
 definePageMeta({
-    title: 'Archivos',
-})
+  title: "Archivos",
+});
 type FileInfo = {
   id: string;
   filename: any;
@@ -362,41 +376,41 @@ let files: Ref<FileInfo[]> = ref([]);
 let replacing = ref(false);
 let recentUpload = ref();
 const changeFile = () => {
-    replacing.value = true;
-    const newTypes = getTypes(selectedFile.value.filetype?.split("/")[0]);
-    uploadTypes.value = newTypes;
-    setTimeout(() => {
-        showAddDialog.value = true;
-    }, 100)
+  replacing.value = true;
+  const newTypes = getTypes(selectedFile.value.filetype?.split("/")[0]);
+  uploadTypes.value = newTypes;
+  setTimeout(() => {
+    showAddDialog.value = true;
+  }, 100);
 };
 let uploadTypes: Ref<{ text: string | "Cualquiera"; types: string | "*" }> =
   ref({ text: "Cualquiera", types: "*" });
-  let showAddDialog = ref(false);
+let showAddDialog = ref(false);
 let uploadingFile: Ref<{
   name: string;
   progress: number;
   uploading: boolean;
   file: any;
 }> = ref({
-    name: "",
-    progress: 0,
-    uploading: false,
-    file: null,
+  name: "",
+  progress: 0,
+  uploading: false,
+  file: null,
 });
 let alertDelete: Ref<{ state: boolean; file: FileInfo }> = ref({
-    state: false,
-    file: emptyFile,
+  state: false,
+  file: emptyFile,
 });
 let showDialog = ref(false);
 watch(showDialog, (val) => {
-    const newTypes = getTypes(selectedFile.value.filetype?.split("/")[0]);
-    !val ? replacing.value = false : null;
-    !val ? uploadTypes.value = newTypes : null;
+  const newTypes = getTypes(selectedFile.value.filetype?.split("/")[0]);
+  !val ? (replacing.value = false) : null;
+  !val ? (uploadTypes.value = newTypes) : null;
 });
 let filter = ref("all");
 async function getData() {
   const response = await fetch(`${back_url}/api/media`, {
-      headers: {
+    headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
@@ -412,7 +426,10 @@ const getTypes = (type: string): { types: string; text: string } => {
     case "sticker":
       return { types: "image/*", text: "Subir una imagen" };
     case "doc":
-      return { types: "application/*,video/*", text: "Subir un documento/video" };
+      return {
+        types: "application/*,video/*",
+        text: "Subir un documento/video",
+      };
     case "audio":
       return {
         types: "audio/wav,audio/ogg,audio/mpeg",
@@ -475,15 +492,15 @@ async function uploadFile() {
     showDialog.value = false;
     showAddDialog.value = false;
     alertDelete.value.file = {
-        id: "",
-        filename: null,
-        size: 0,
-        createdAt: new Date(),
-        isInResponse: false,
-        responseIds: [0],
-        filetype: "",
-        originalname: "",
-      };
+      id: "",
+      filename: null,
+      size: 0,
+      createdAt: new Date(),
+      isInResponse: false,
+      responseIds: [0],
+      filetype: "",
+      originalname: "",
+    };
     uploadingFile.value = {
       name: "",
       progress: 0,

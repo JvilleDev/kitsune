@@ -26,7 +26,8 @@
     "short-unique-id": "^5.2.0",
     "sqlite3": "^5.1.7",
     "typescript": "^5.5.3",
-    "venom-bot": "^5.1.0"
+    "venom-bot": "^5.1.0",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

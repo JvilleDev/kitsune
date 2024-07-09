@@ -212,38 +212,50 @@ async function handleMessage(msg: Message) {
           let file, originalname;
           switch (response.type) {
             case "image":
-              {
+              try {
                 const { file: imgFile, originalname: imgOriginalname } =
                   await getFile(response.answer);
                 file = imgFile;
                 originalname = imgOriginalname;
                 await wspClient.sendImage(msg.from, file, "", "");
+              } catch (err) {
+                console.error("Error getting image file:", err);
+                await wspClient.sendText(msg.from, "Por favor, espera un momento.");
               }
               break;
             case "text":
               await wspClient.sendText(msg.from, response.answer);
               break;
             case "doc":
-              {
+              try {
                 const { file: docFile, originalname: docOriginalname } =
                   await getFile(response.answer);
                 file = docFile;
                 originalname = docOriginalname;
                 await wspClient.sendFile(msg.from, file, originalname, "");
+              } catch (err) {
+                console.error("Error getting document file:", err);
+                await wspClient.sendText(msg.from, "Por favor, espera un momento.");
               }
               break;
             case "audio":
-              {
+              try {
                 const { file: audioFile } = await getFile(response.answer);
                 file = audioFile;
                 await wspClient.sendVoice(msg.from, file);
+              } catch (err) {
+                console.error("Error getting audio file:", err);
+                await wspClient.sendText(msg.from, "Por favor, espera un momento.");
               }
               break;
             case "sticker":
-              {
+              try {
                 const { file: stickerFile } = await getFile(response.answer);
                 file = stickerFile;
                 await wspClient.sendImageAsSticker(msg.from, file);
+              } catch (err) {
+                console.error("Error getting sticker file:", err);
+                await wspClient.sendText(msg.from, "Por favor, espera un momento.");
               }
               break;
             default:
@@ -264,7 +276,7 @@ async function handleMessage(msg: Message) {
           "tmp",
           `${Date.now()}_${id.rnd()}.${msg.mimetype.split("/")[1]}`
         );
-        fs.writeFileSync(tmpFilePath, mediaBuffer);
+        fs.writeFileSync(tmpFilePath, mediaBuffer, { encoding: "binary" });
 
         const mp3FilePath = path.join(
           __dirname,
@@ -321,38 +333,50 @@ async function handleMessage(msg: Message) {
             await wspClient.markMarkSeenMessage(msg.from);
             switch (response.type) {
               case "image":
-                {
+                try {
                   const { file: imgFile, originalname: imgOriginalname } =
                     await getFile(response.answer);
                   file = imgFile;
                   originalname = imgOriginalname;
                   await wspClient.sendImage(msg.from, file, "", "");
+                } catch (err) {
+                  console.error("Error getting image file:", err);
+                  await wspClient.sendText(msg.from, "Por favor, espera un momento.");
                 }
                 break;
               case "text":
                 await wspClient.sendText(msg.from, response.answer);
                 break;
               case "doc":
-                {
+                try {
                   const { file: docFile, originalname: docOriginalname } =
                     await getFile(response.answer);
                   file = docFile;
                   originalname = docOriginalname;
                   await wspClient.sendFile(msg.from, file, originalname, "");
+                } catch (err) {
+                  console.error("Error getting document file:", err);
+                  await wspClient.sendText(msg.from, "Por favor, espera un momento.");
                 }
                 break;
               case "audio":
-                {
+                try {
                   const { file: audioFile } = await getFile(response.answer);
                   file = audioFile;
                   await wspClient.sendVoice(msg.from, file);
+                } catch (err) {
+                  console.error("Error getting audio file:", err);
+                  await wspClient.sendText(msg.from, "Por favor, espera un momento.");
                 }
                 break;
               case "sticker":
-                {
+                try {
                   const { file: stickerFile } = await getFile(response.answer);
                   file = stickerFile;
                   await wspClient.sendImageAsSticker(msg.from, file);
+                } catch (err) {
+                  console.error("Error getting sticker file:", err);
+                  await wspClient.sendText(msg.from, "Por favor, espera un momento.");
                 }
                 break;
               default:

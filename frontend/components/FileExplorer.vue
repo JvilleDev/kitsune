@@ -68,8 +68,6 @@
   </template>
   
   <script setup lang="ts">
-  import { defineEmits, ref } from 'vue';
-  
   const emit = defineEmits(['fileSelected']);
   const { back_url } = useRuntimeConfig().public;
   type FileInfo = {

@@ -29,7 +29,14 @@ const upload = multer({ storage });
 
 // * -> Fetch All Media
 router.get("/media", async (req: Request, res: Response) => {
-  db.all("SELECT * FROM media", (err, rows) => {
+  const sql = `
+    SELECT m.*, 
+      CASE WHEN EXISTS (SELECT 1 FROM responses r WHERE r.answer = m.id) 
+           THEN 1 ELSE 0 END AS isInResponse
+    FROM media m
+  `;
+  
+  db.all(sql, (err, rows) => {
     if (err) {
       console.error(err);
       res.status(500).send("Internal Server Error");

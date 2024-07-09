@@ -4,7 +4,15 @@
       <Icon name="tabler:user-bolt" /><span>Chats</span>
     </h1>
     <div class="content">
-      <Table>
+      <div
+          v-if="chats.length === 0"
+          class="flex items-center h-[80%] w-full justify-center gap-2"
+      >
+          <h3 class="text-lg text-center">
+          Aquí no hay nada<br /><span class="text-3xl">¯\_(ツ)_/¯</span>
+          </h3>
+      </div>
+      <Table v-if="chats.length > 0">
         <TableHeader class="select-none">
           <TableRow>
             <TableHead class="w-16">
