@@ -8,7 +8,8 @@
     "dev": "bun --watch src/index.ts",
     "start": "bun src/index.ts",
     "node-start": "tsc && node --env-file=.env ./src/dist/index.js",
-    "node-dev": "tsc-watch --silent --noClear -p tsconfig.json --onSuccess \"node --env-file=.env ./src/dist/index.js\""
+    "node-dev": "tsc-watch --silent --noClear -p tsconfig.json --onSuccess \"node --env-file=.env ./src/dist/index.js\"",
+    "postinstall": "bunx @puppeteer/browsers install chrome@stable --path $HOME/.cache/puppeteer"
   },
   "keywords": [],
   "author": "",
