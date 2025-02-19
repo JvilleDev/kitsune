@@ -12,4 +12,5 @@ COPY . .
 RUN bun install
 
 # Comando de inicio para el backend
-CMD ["bun", "run", "start"]
+WORKDIR /app
+ENTRYPOINT ["bun", "run", "start"]
